@@ -97,6 +97,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                 //Obtenemos la respuesta del puntaje
 
                 //Válidamos que halla escogido alguna respuesta
+
                 if (respuesta != -1) {
 
                     //Verificamos que la posición
