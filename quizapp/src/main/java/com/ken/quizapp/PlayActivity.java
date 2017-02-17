@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ken.quizapp.fragments.AnswerFragment;
 import com.ken.quizapp.fragments.QuestionFragment;
 import com.ken.quizapp.models.Question;
 
@@ -25,7 +26,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
     private int questionPosition;
 
 
-    private int correctAnswer;
+    private int[] correctAnswer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 
         //Creamos el fragment con el que iniciará mi Activity y le asignamos la pregunta inicial.
         questionFragment = new QuestionFragment(questions.get(questionPosition).getTitle());
-
+        correctAnswer = new int[questions.size()];
         //Ponemos nuestro fragmento en el FrameLayout
         changeFragment(questionFragment);
 
@@ -70,43 +71,81 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
     private void initViews() {
         View view = findViewById(R.id.quiz_img_arrow_right);
         view.setOnClickListener(this);
+
+        View view2 = findViewById(R.id.quiz_img_arrow_left);
+        view2.setOnClickListener(this);
     }
 
+    private int score ()
+    {
+        int score=0;
+        for(int answer : correctAnswer)
+        {
+            score+=answer;
+        }
+
+        return score;
+    }
 
     @Override
     public void onClick(View view) {
 
-        //Obtenemos la respuesta del puntaje
         int respuesta = questionFragment.respuesta;
+        switch (view.getId())
+        {
+            case R.id.quiz_img_arrow_right:
+                //Obtenemos la respuesta del puntaje
 
-        //Válidamos que halla escogido alguna respuesta
-        if (respuesta != -1) {
 
-            //Verificamos que la posición
-            if (respuesta == questions.get(questionPosition).getAnswer()) {
-                correctAnswer++;
-            }
+                //Válidamos que halla escogido alguna respuesta
+                if (respuesta != -1) {
+
+                    //Verificamos que la posición
+                    if (respuesta == questions.get(questionPosition).getAnswer()) {
+                        correctAnswer[questionPosition]=1;
+                    }else{
+                        correctAnswer[questionPosition]=0;
+                    }
+
+
+                    questionPosition++;
+                    //Creamos el fragment con el que iniciará mi Activity y le asignamos la pregunta inicial.
+                    questionFragment = new QuestionFragment(questions.get(questionPosition).getTitle());
+                    changeFragment(questionFragment);
+                }
+
+
+                /**
+                 * Verificamos si vamos en la última posición de nuestra
+                 * lista de preguntas , si es el caso mostramos el puntaje
+                 * de otro modo avanzamos a la siguiente pregunta
+                 */
+                if (questionPosition == questions.size() - 1) {
+
+
+                    //Mostramos el puntaje
+                    AnswerFragment answerFragment = new AnswerFragment("Tu puntaje es : " + score() + " de " + questions.size());
+                    changeFragment(answerFragment);
+
+                }
+                break;
+
+            case R.id.quiz_img_arrow_left:
+                if(questionPosition > 0)
+                {
+
+                    questionPosition--;
+                    questionFragment = new QuestionFragment(questions.get(questionPosition).getTitle());
+                    changeFragment(questionFragment);
+
+                }
+                break;
         }
 
 
-        /**
-         * Verificamos si vamos en la última posición de nuestra
-         * lista de preguntas , si es el caso mostramos el puntaje
-         * de otro modo avanzamos a la siguiente pregunta
-         */
-        if (questionPosition == questions.size() - 1) {
 
 
-            //Mostramos el puntaje
-            Toast.makeText(this, "Tu puntaje es : " + correctAnswer + " de " + questions.size(), Toast.LENGTH_SHORT).show();
-        } else {
 
-            questionPosition++;
-
-            //Creamos el fragment con el que iniciará mi Activity y le asignamos la pregunta inicial.
-            questionFragment = new QuestionFragment(questions.get(questionPosition).getTitle());
-            changeFragment(questionFragment);
-        }
     }
 
 

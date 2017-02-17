@@ -33,7 +33,7 @@
 
 
         <LinearLayout
-            android:id="@+id/layout_arrow_left"
+            android:id="@+id/quiz_img_arrow_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
