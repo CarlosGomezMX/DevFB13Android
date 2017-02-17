@@ -25,7 +25,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 
     private int questionPosition;
 
-    //la variable que llevara los resultados de las preguntas
+    //la variable que llevara los resultados de las preguntas contestadas
     private int[] correctAnswer;
 
     @Override
