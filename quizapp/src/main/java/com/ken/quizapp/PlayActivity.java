@@ -96,7 +96,6 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.quiz_img_arrow_right:
                 //Obtenemos la respuesta del puntaje
 
-
                 //Válidamos que halla escogido alguna respuesta
                 if (respuesta != -1) {
 
