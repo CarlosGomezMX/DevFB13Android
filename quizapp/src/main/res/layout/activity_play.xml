@@ -10,7 +10,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:textSize="17sp"
-        android:text="Bienvenido Ken"
+       android:id="@+id/nombre"
         android:textColor="@color/white" />
 
 

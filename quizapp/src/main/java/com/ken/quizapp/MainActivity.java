@@ -52,6 +52,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         } else {
             Intent intent = new Intent(MainActivity.this, PlayActivity.class);
+
+            //
+            //Configuramos nuestro intent para indicarle que actividad va a ejecutar
+
+
+            //agregamos parametros a nuestro intent para ser compartidos
+            //con la otra actividad
+
+            intent.putExtra("nombre", userName);
+
+
+            //ejecutamos el intent para que incie con la segunda actividad
+            startActivity(intent);
+            //
             startActivity(intent);
         }
 

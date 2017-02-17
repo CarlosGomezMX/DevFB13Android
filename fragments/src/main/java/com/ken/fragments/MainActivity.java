@@ -24,7 +24,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        changeFragment(new TercerFragment());
+        //changeFragment(new TercerFragment());
+
+        changeFragment(CuartoFragment.newInstance("Texto inicial"));
 
 
     }

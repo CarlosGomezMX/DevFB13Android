@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ken.quizapp.fragments.AnswerFragment;
@@ -33,6 +34,14 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_play);
+
+        Bundle extras = getIntent().getExtras();
+
+
+        String texto = extras.getString("nombre");
+        TextView nombre = (TextView) findViewById(R.id.nombre);
+        nombre.setText(texto);
+
 
         /**
          * Inicializa las vistas
