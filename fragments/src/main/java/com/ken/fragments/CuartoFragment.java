@@ -1,6 +1,7 @@
 package com.ken.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,10 +14,13 @@ import android.widget.TextView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CuartoFragment extends Fragment {
+public class CuartoFragment extends Fragment implements View.OnClickListener {
 
     private static final String ARG_PARAM1 = "param1";
     private String text;
+    private OnFragment4InteractionListener mlistener;
+    private TextView tvText;
+    private TextView tvContador;
 
     public static CuartoFragment newInstance(String text)
     {
@@ -29,6 +33,17 @@ public class CuartoFragment extends Fragment {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context)
+    {
+        super.onAttach(context);
+
+        if(context instanceof  MainActivity)
+        {
+           mlistener = (OnFragment4InteractionListener) context;
+        }
     }
 
     @Override
@@ -55,9 +70,39 @@ public class CuartoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cuarto, container, false);
-        TextView tvText = (TextView) view.findViewById(R.id.tv_fragment4);
+       tvText = (TextView) view.findViewById(R.id.tv_fragment4);
         tvText.setText(text);
+        tvContador = (TextView) view.findViewById(R.id.contadorCuarto);
+        //Referencia
+        View rootLayout = view.findViewById(R.id.fragment4_root_layout);
+        rootLayout.setOnClickListener(this);
+
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        mlistener.onFragment4Interaction("Hola!!");
+    }
+
+    public void setDatoInicial(String texto)
+    {
+        tvText.setText(texto);
+    }
+
+    public String getContador() {
+        return (String) tvContador.getText();
+    }
+
+    public void setContador(int contador) {
+        tvContador.setText(contador+"");
+    }
+
+    public interface OnFragment4InteractionListener {
+
+        void onFragment4Interaction(String data);
+
+
     }
 
 }

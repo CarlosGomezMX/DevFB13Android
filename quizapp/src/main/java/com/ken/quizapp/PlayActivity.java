@@ -1,7 +1,9 @@
 package com.ken.quizapp;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,13 +18,25 @@ import com.ken.quizapp.models.Question;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayActivity extends AppCompatActivity implements View.OnClickListener {
+public class PlayActivity extends FragmentActivity //implements View.OnClickListener
+{
 
     /**
      * Lista que contendra las preguntas del quiz
      */
     private List<Question> questions = new ArrayList<>();
     private QuestionFragment questionFragment;
+
+    /**
+     * el page widget
+     *
+     */
+    ViewPager pager = null;
+
+    /**
+     * el adaptador que provee al view pager de las vistas.
+     */
+    MyFragmentPagerAdapter pagerAdapter;
 
     private int questionPosition;
 
@@ -36,29 +50,45 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_play);
 
         Bundle extras = getIntent().getExtras();
+        /**
+         * Inicializa las vistas
+         */
+        initViews();
 
 
         String texto = extras.getString("nombre");
         TextView nombre = (TextView) findViewById(R.id.nombre);
         nombre.setText(texto);
 
+        // Instanseamos el ViewPager
+        this.pager = (ViewPager) this.findViewById(R.id.pager);
 
-        /**
-         * Inicializa las vistas
-         */
-        initViews();
+        // creamos un adaptador con el fragmento que mostramos
+        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(
+                getSupportFragmentManager());
+
 
         /**
          * Incializamos las preguntas
          */
         initQuestions();
 
+        //agregamos las preguntas al fragmento
+        for(Question question: questions)
+        {
+            adapter.addFragment(new QuestionFragment(question.getTitle()));
+        }
+
+        this.pager.setAdapter(adapter);
+
+
+/*
         //Creamos el fragment con el que iniciará mi Activity y le asignamos la pregunta inicial.
         questionFragment = new QuestionFragment(questions.get(questionPosition).getTitle());
         correctAnswer = new int[questions.size()];
         //Ponemos nuestro fragmento en el FrameLayout
         changeFragment(questionFragment);
-
+*/
     }
 
     /**
@@ -79,10 +109,11 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void initViews() {
         View view = findViewById(R.id.quiz_img_arrow_right);
-        view.setOnClickListener(this);
+        //view.setOnClickListener(this);
 
         View view2 = findViewById(R.id.quiz_img_arrow_left);
-        view2.setOnClickListener(this);
+        //view2.setOnClickListener(this);
+
     }
 
     private int score ()
@@ -95,7 +126,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 
         return score;
     }
-
+/*
     @Override
     public void onClick(View view) {
 
@@ -118,9 +149,10 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 
 
                     questionPosition++;
-                    //Creamos el fragment con el que iniciará mi Activity y le asignamos la pregunta inicial.
-                    questionFragment = new QuestionFragment(questions.get(questionPosition).getTitle());
-                    changeFragment(questionFragment);
+
+                   // questionFragment = new QuestionFragment(questions.get(questionPosition).getTitle());
+                    //changeFragment(questionFragment);
+                    this.pager.setCurrentItem(this.pager.getCurrentItem() + 1);
                 }
 
 
@@ -129,6 +161,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                  * lista de preguntas , si es el caso mostramos el puntaje
                  * de otro modo avanzamos a la siguiente pregunta
                  */
+    /*
                 if (questionPosition == questions.size() - 1) {
 
 
@@ -144,8 +177,9 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                 {
 
                     questionPosition--;
-                    questionFragment = new QuestionFragment(questions.get(questionPosition).getTitle());
-                    changeFragment(questionFragment);
+                    //questionFragment = new QuestionFragment(questions.get(questionPosition).getTitle());
+                    //changeFragment(questionFragment);
+                    this.pager.setCurrentItem(this.pager.getCurrentItem() - 1);
 
                 }
                 break;
@@ -156,18 +190,29 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
-
+*/
+/*
     public void changeFragment(Fragment fragment) {
         /**
          *Obtengo el FragmentManaget que me ayuda con las transacciones
          *que necesite hacer con mis fragmentos
          */
-        FragmentManager fragmentManager = getSupportFragmentManager();
+      /*  FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, fragment)
-                .commit();
+          .replace(R.id.pager, fragment)
+            .commit();
+    }
+*/
+    @Override
+    public void onBackPressed() {
+
+        // Return to previous page when we press back button
+        if (this.pager.getCurrentItem() == 0)
+            super.onBackPressed();
+        else
+            this.pager.setCurrentItem(this.pager.getCurrentItem() - 1);
+
     }
 
 }
